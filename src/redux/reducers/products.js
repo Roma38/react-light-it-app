@@ -14,11 +14,11 @@ const initialState = {
 export const productsReduser = (state = initialState, { type, payload }) => {
   switch (type) {
     case PRODUCTS_LOADING:
-      return { ...state, productsLoading: true };
+      return { ...state, productsLoading: true, productsLoaded: false };
     case PRODUCTS_LOAD_SUCCEED:
-      return { ...state, productsLoaded: true, products: payload.products };
+      return { ...state, productsLoading: false, productsLoaded: true, products: payload };
     case PRODUCTS_LOAD_FAILED:
-      return { ...state };
+      return { ...state, productsLoading: false, productsLoaded: false, productsLoadError: payload, products: []};
 
     default:
       return state;
