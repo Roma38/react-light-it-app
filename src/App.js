@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
-import { Card, Container, CardGroup } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 import axios from "axios";
 import { API_HOST } from "./config";
 import "./App.css";
 import Header from "./components/Header";
 import ProductList from "./components/ProductList";
+import ProductPage from "./components/ProductPage";
 import {
   productsLoadStart,
   productsLoadSucceed,
@@ -19,6 +20,7 @@ class AppComponent extends Component {
       <Router className="App">
         <Header />
         <Route exact path="/" component={ProductList} />
+        <Route path="/product/:productId" component={ProductPage} />
         <Container as="footer" textAlign="right">
           <Link to="/">
             Lorem<span>Ipsum</span>Shop.
@@ -28,6 +30,9 @@ class AppComponent extends Component {
     );
   }
   componentDidMount() {
+    this.loadProducts();
+  }
+  loadProducts() {
     this.props.productsLoadStart();
     axios
       .get(`${API_HOST}api/products/`)
@@ -40,6 +45,8 @@ class AppComponent extends Component {
       });
   }
 }
+
+/* TODO login переименовать в auth */
 
 const mapStateToProps = ({ login, products }) => ({ login, products });
 

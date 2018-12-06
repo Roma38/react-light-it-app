@@ -5,20 +5,20 @@ import {
 } from "../actions/products";
 
 const initialState = {
-  productsLoading: false,
-  productsLoaded: false,
-  productsLoadError: null,
-  products: []
+  loading: false,
+  succeed: false,
+  error: null,
+  items: []
 };
 
 export const productsReduser = (state = initialState, { type, payload }) => {
   switch (type) {
     case PRODUCTS_LOADING:
-      return { ...state, productsLoading: true, productsLoaded: false };
+      return { ...state, loading: true, succeed: false };
     case PRODUCTS_LOAD_SUCCEED:
-      return { ...state, productsLoading: false, productsLoaded: true, products: payload };
+      return { ...state, loading: false, succeed: true, items: payload };
     case PRODUCTS_LOAD_FAILED:
-      return { ...state, productsLoading: false, productsLoaded: false, productsLoadError: payload, products: []};
+      return { ...state, loading: false, succeed: false, error: payload, items: [] };
 
     default:
       return state;

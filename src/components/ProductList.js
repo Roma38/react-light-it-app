@@ -1,21 +1,21 @@
 import React from "react";
 import { connect } from "react-redux";
-import { BrowserRouter as Router, Link } from "react-router-dom";
-import { API_HOST } from "../config";
+import { Link } from "react-router-dom";
+import { STATIC_HOST } from "../config";
 import { Card, Container, Image, CardGroup } from "semantic-ui-react";
 
 function ProductListComponent({ products }) {
   return (
     <Container>
       <CardGroup>
-        {products.productsLoading ? (
+        {products.loading ? (
           <div>Loader...</div>
-        ) : products.productsLoadFailed ? (
+        ) : products.error ? (
           <div>Oops, something went wrong</div>
         ) : (
-          products.products.map((product, index) => (
-            <Card key={index} link as={Link} to={`${product.id}`}>
-              <Image src={`${API_HOST}static/${product.img}`} />
+          products.items.map((product, index) => (
+            <Card key={index} link as={Link} to={`product/${product.id}`}>
+              <Image src={`${STATIC_HOST}/${product.img}`} />
               <Card.Content>
                 <Card.Header>{product.title}</Card.Header>
               </Card.Content>
