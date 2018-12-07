@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import axios from "axios";
 import { API_HOST } from "./config";
@@ -19,8 +19,10 @@ class AppComponent extends Component {
     return (
       <Router className="App">
         <Header />
-        <Route exact path="/" component={ProductList} />
-        <Route path="/product/:productId" component={ProductPage} />
+        <main className="main-content">
+          <Route exact path="/" component={ProductList} />
+          <Route path="/product/:productId" component={ProductPage} />
+        </main>
         <Container as="footer" textAlign="right">
           <Link to="/">
             Lorem<span>Ipsum</span>Shop.

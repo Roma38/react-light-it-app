@@ -4,7 +4,7 @@ import { Button, Container } from "semantic-ui-react";
 
 function Header() {
   return (
-    <Container>
+    <Container as="header">
       <Link to="/">
         <img src="lorem-logo.png" alt="Logo" height="52px" />
       </Link>
