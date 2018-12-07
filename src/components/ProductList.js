@@ -15,7 +15,7 @@ function ProductListComponent({ products }) {
         ) : (
           products.items.map((product, index) => (
             <Card key={index} link as={Link} to={`product/${product.id}`}>
-              <Image src={`${STATIC_HOST}/${product.img}`} />
+                  <Image src={`${STATIC_HOST}/${product.img}`} fluid />
               <Card.Content>
                 <Card.Header>{product.title}</Card.Header>
               </Card.Content>

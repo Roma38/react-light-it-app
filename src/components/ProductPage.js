@@ -1,43 +1,79 @@
-import React from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { STATIC_HOST } from "../config";
+import { STATIC_HOST, API_HOST } from "../config";
+import {
+  reviewsLoadStart,
+  reviewsLoadSucceed,
+  reviewsLoadFailed
+} from "../redux/actions/reviews";
 import { Header, Container, Image } from "semantic-ui-react";
 import axios from "axios";
+import Reviews from "./Reviews";
 
-function ProductPageComponent({ match, products }) {
-  const productId = parseInt(match.params.productId);
+class ProductPageComponent extends Component {
+  render() {
+    const productId = parseInt(this.props.match.params.productId);
 
-  if (isNaN(productId)) {
-    throw new Error("`productId` should be a number");
+    if (isNaN(productId)) {
+      throw new Error("`productId` should be a number");
+    }
+
+    const product = this.props.products.items.find(
+      ({ id }) => id === parseInt(this.props.match.params.productId)
+    );
+    return (
+      <Container>
+        {this.props.products.loading ? (
+          <div>Loader...</div>
+        ) : this.props.products.succeed ? (
+          <div>
+            <Image src={`${STATIC_HOST}/${product.img}`} centered />
+            <Header as="h1" textAlign="center">
+              {product.title}
+              <Header.Subheader>{product.text}</Header.Subheader>
+            </Header>
+            <Reviews reviews={this.props.reviews} />
+          </div>
+        ) : this.props.products.error ? (
+          console.error(this.props.products.error)
+        ) : (
+          <div />
+        )}
+      </Container>
+    );
   }
-
-  const product = products.items.find(
-    ({ id }) => id === parseInt(match.params.productId)
-  );
-  console.log(products);
-  return (
-    <Container>
-      {products.loading ? (
-        <div>Loader...</div>
-      ) : products.succeed ? (
-        <div>
-          <Image src={`${STATIC_HOST}/${product.img}`} centered />
-          <Header as="h1" textAlign="center">
-            {product.title}
-            <Header.Subheader>{product.text}</Header.Subheader>
-          </Header>
-        </div>
-      ) : products.error ? (
-        console.error(products.error)
-      ) : (
-        <div />
-      )}
-    </Container>
-  );
+  componentDidMount() {
+    this.loadReviews();
+  }
+  loadReviews() {
+    this.props.reviewsLoadStart();
+    axios
+      .get(`${API_HOST}/api/reviews/${this.props.match.params.productId}`)
+      .then(({ data }) => {
+        this.props.reviewsLoadSucceed(data);
+      })
+      .catch(error => {
+        console.error(error);
+        this.props.reviewsLoadFailed(error);
+      });
+  }
 }
 
-const mapStateToProps = ({ products, login }) => ({ products, login });
+const mapStateToProps = ({ products, login, reviews }) => ({
+  products,
+  login,
+  reviews
+});
 
-const ProductPage = connect(mapStateToProps)(ProductPageComponent);
+const mapDispatchToProps = dispatch => ({
+  reviewsLoadStart: () => dispatch(reviewsLoadStart()),
+  reviewsLoadSucceed: reviews => dispatch(reviewsLoadSucceed(reviews)),
+  reviewsLoadFailed: error => dispatch(reviewsLoadFailed(error))
+});
+
+const ProductPage = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductPageComponent);
 
 export default ProductPage;

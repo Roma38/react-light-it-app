@@ -41,7 +41,7 @@ class AppComponent extends Component {
       })
       .catch(error => {
         console.error(error);
-        productsLoadFailed(error);
+        this.props.productsLoadFailed(error);
       });
   }
 }
