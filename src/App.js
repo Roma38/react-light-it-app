@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import { Container } from "semantic-ui-react";
 import axios from "axios";
 import { API_HOST } from "./config";
 import "./App.css";
-import Header from "./components/Header";
+import HeaderComponent from "./components/Header/Header";
 import ProductList from "./components/ProductList";
 import ProductPage from "./components/ProductPage";
 import {
@@ -16,9 +16,8 @@ import {
 
 class AppComponent extends Component {
   render() {
-    return (
-      <Router className="App">
-        <Header />
+    return <Router className="App">
+        <HeaderComponent />
         <main className="main-content">
           <Route exact path="/" component={ProductList} />
           <Route path="/product/:productId" component={ProductPage} />
@@ -28,8 +27,7 @@ class AppComponent extends Component {
             Lorem<span>Ipsum</span>Shop.
           </Link>
         </Container>
-      </Router>
-    );
+      </Router>;
   }
   componentDidMount() {
     this.loadProducts();
@@ -48,9 +46,7 @@ class AppComponent extends Component {
   }
 }
 
-/* TODO login переименовать в auth */
-
-const mapStateToProps = ({ login, products }) => ({ login, products });
+const mapStateToProps = ({ auth, products }) => ({ auth, products });
 
 const mapDispatchToProps = dispatch => ({
   productsLoadStart: () => dispatch(productsLoadStart()),
