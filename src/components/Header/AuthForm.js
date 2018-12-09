@@ -22,24 +22,27 @@ class AuthFormComponent extends Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit = () => {
-    console.log(this);
-    this.authRequest(this.state.userName, this.state.password);
-    this.setState({ email: "", name: "" });
+    this.authRequest(
+      this.state.userName,
+      this.state.password,
+      this.props.authMode
+    );
+    this.props.closeModal();
   };
 
-  authRequest(username, password) {
+  authRequest(username, password, authMode) {
     this.props.authRequested(username, password); //Нужно ли передавать аргументы? Вряд-ли...
     axios
-      .post(`${API_HOST}api/register/`, { username, password })
+      .post(`${API_HOST}api/${authMode}/`, { username, password })
       .then(({ data }) => {
         console.log(data);
-        data.succes
+        data.success
           ? this.props.authSucceed(username, data.token)
           : this.props.authFailed(data.message);
       })
       .catch(error => {
         this.props.authFailed(error);
-        throw new Error(error);
+        console.error(error);
       });
   }
 

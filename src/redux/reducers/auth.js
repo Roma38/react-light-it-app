@@ -22,7 +22,8 @@ export const authReducer = (state = initialState, { type, payload }) => {
         ...state,
         logedIn: true,
         userName: payload.userName,
-        token: payload.token
+        token: payload.token,
+        authError: null
       };
     case AUTH_FAILED:
       return { ...state, authError: payload.error };

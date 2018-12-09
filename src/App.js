@@ -16,7 +16,8 @@ import {
 
 class AppComponent extends Component {
   render() {
-    return <Router className="App">
+    return (
+      <Router className="App">
         <HeaderComponent />
         <main className="main-content">
           <Route exact path="/" component={ProductList} />
@@ -27,7 +28,8 @@ class AppComponent extends Component {
             Lorem<span>Ipsum</span>Shop.
           </Link>
         </Container>
-      </Router>;
+      </Router>
+    );
   }
   componentDidMount() {
     this.loadProducts();

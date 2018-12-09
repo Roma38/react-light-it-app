@@ -33,7 +33,7 @@
 
 /************     MY STYLES     ************/
 
-.header {
+.page-header {
   display: flex !important;
   align-items: center;
   justify-content: space-between;
@@ -41,4 +41,8 @@
 
 .main-content {
   flex-grow: 1;
+}
+
+.modal-header{
+  text-transform: capitalize;
 }

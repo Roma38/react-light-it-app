@@ -1,49 +1,51 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Modal, Icon, Header } from "semantic-ui-react";
+import { Container, Modal } from "semantic-ui-react";
 import logo from "../../assets/lorem-logo.png";
+import AuthButtons from "./AuthButtons";
+import AuthForm from "./AuthForm";
 
 class HeaderComponent extends Component {
-  /* constructor(props){
+  constructor(props) {
     super(props);
-    this.state
-  } */
-  state = { modalOpen: false };
-  handleOpen = () => this.setState({ modalOpen: true });
+    this.state = { modalOpen: false, authMode: "" };
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
 
-  handleClose = () => this.setState({ modalOpen: false });
+  handleOpen(authMode) {
+    this.setState({ modalOpen: true, authMode });
+  }
+
+  handleClose() {
+    this.setState({ modalOpen: false });
+  }
   render() {
-    return <Container as="header" className="header">
+    return (
+      <Container as="header" className="page-header">
         <Link to="/">
           <img src={logo} alt="Logo" height="52px" />
         </Link>
 
-        <Modal trigger={<Button onClick={this.handleOpen}>
-              Show Modal
-            </Button>} open={this.state.modalOpen} onClose={this.handleClose} basic size="small">
-          {authButtons()}
-          {/* <Header icon="browser" content="Cookies policy" /> */}
+        <Modal
+          trigger={<AuthButtons toggleModal={this.handleOpen} />}
+          open={this.state.modalOpen}
+          onClose={this.handleClose}
+          basic
+          closeIcon
+          size="small"
+        >
           <Modal.Content>
-            <h3>
-              This website uses cookies to ensure the best user experience.
-            </h3>
+            <h1 className="modal-header">{this.state.authMode}</h1>
+            <AuthForm
+              authMode={this.state.authMode}
+              closeModal={this.handleClose}
+            />
           </Modal.Content>
-          <Modal.Actions>
-            <Button color="green" onClick={this.handleClose} inverted>
-              <Icon name="checkmark" /> Got it
-            </Button>
-          </Modal.Actions>
         </Modal>
-        {authButtons()}
-      </Container>;
+      </Container>
+    );
   }
 }
 
-const authButtons = () => (
-  <Button.Group /* floated="right" */>
-    <Button>Registration</Button>
-    <Button.Or />
-    <Button>Login</Button>
-  </Button.Group>
-);
 export default HeaderComponent;
