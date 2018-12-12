@@ -7,7 +7,7 @@ import {
 
 const initialState = {
   authLoading: false,
-  logedIn: false,
+  loggedIn: false,
   authError: null,
   userName: null,
   token: null
@@ -20,7 +20,7 @@ export const authReducer = (state = initialState, { type, payload }) => {
     case AUTH_SUCCEED:
       return {
         ...state,
-        logedIn: true,
+        loggedIn: true,
         userName: payload.userName,
         token: payload.token,
         authError: null
@@ -28,7 +28,7 @@ export const authReducer = (state = initialState, { type, payload }) => {
     case AUTH_FAILED:
       return { ...state, authError: payload.error };
     case LOG_OUT:
-      return state;
+      return { ...state, loggedIn: false, userName: null, token: null};
 
     default:
       return state;

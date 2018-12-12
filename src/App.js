@@ -7,12 +7,16 @@ import { API_HOST } from "./config";
 import "./App.css";
 import HeaderComponent from "./components/Header/Header";
 import ProductList from "./components/ProductList";
-import ProductPage from "./components/ProductPage";
+import ProductPage from "./components/ProductPage/ProductPage";
 import {
   productsLoadStart,
   productsLoadSucceed,
   productsLoadFailed
 } from "./redux/actions/products";
+import { authSucceed } from "./redux/actions/auth";
+
+//Как проверить не заэкспайрился ли токен?
+
 
 class AppComponent extends Component {
   render() {
@@ -32,6 +36,9 @@ class AppComponent extends Component {
     );
   }
   componentDidMount() {
+    if (localStorage.getItem("token")) {
+      this.props.authSucceed(null, localStorage.getItem("token"));
+    }
     this.loadProducts();
   }
   loadProducts() {
@@ -51,6 +58,7 @@ class AppComponent extends Component {
 const mapStateToProps = ({ auth, products }) => ({ auth, products });
 
 const mapDispatchToProps = dispatch => ({
+  authSucceed: (username, token) => dispatch(authSucceed(username, token)),
   productsLoadStart: () => dispatch(productsLoadStart()),
   productsLoadSucceed: products => dispatch(productsLoadSucceed(products)),
   productsLoadFailed: error => dispatch(productsLoadFailed(error))

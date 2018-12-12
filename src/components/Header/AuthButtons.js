@@ -5,7 +5,7 @@ function AuthButtons({ toggleModal }) {
   const registerModal = () => toggleModal("register");
   const loginModal = () => toggleModal("login");
   return (
-    <Button.Group>
+    <Button.Group className="auth-buttons">
       <Button onClick={registerModal}>Registration</Button>
       <Button.Or />
       <Button onClick={loginModal}>Login</Button>

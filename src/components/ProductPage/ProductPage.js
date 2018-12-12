@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { STATIC_HOST, API_HOST } from "../config";
+import { STATIC_HOST, API_HOST } from "../../config";
 import {
   reviewsLoadStart,
   reviewsLoadSucceed,
   reviewsLoadFailed
-} from "../redux/actions/reviews";
+} from "../../redux/actions/reviews";
 import { Header, Container, Image } from "semantic-ui-react";
 import axios from "axios";
 import Reviews from "./Reviews";
+import AddReviewForm from "./AddReviewForm";
 
 class ProductPageComponent extends Component {
   render() {
@@ -28,10 +29,19 @@ class ProductPageComponent extends Component {
         ) : this.props.products.succeed ? (
           <div>
             <Image src={`${STATIC_HOST}/${product.img}`} centered />
+
             <Header as="h1" textAlign="center">
               {product.title}
               <Header.Subheader>{product.text}</Header.Subheader>
             </Header>
+
+            {this.props.auth.loggedIn ? (
+              <AddReviewForm
+                productId={productId}
+                token={this.props.auth.token}
+              />
+            ) : null}
+
             <Reviews reviews={this.props.reviews} />
           </div>
         ) : this.props.products.error ? (
@@ -59,9 +69,9 @@ class ProductPageComponent extends Component {
   }
 }
 
-const mapStateToProps = ({ products, login, reviews }) => ({
+const mapStateToProps = ({ products, auth, reviews }) => ({
   products,
-  login,
+  auth,
   reviews
 });
 

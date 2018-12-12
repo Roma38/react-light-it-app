@@ -34,9 +34,10 @@
 /************     MY STYLES     ************/
 
 .page-header {
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
+}
+
+.auth-buttons {
+  float: right;
 }
 
 .main-content {

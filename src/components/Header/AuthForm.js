@@ -6,8 +6,7 @@ import { API_HOST } from "../../config";
 import {
   authRequested,
   authSucceed,
-  authFailed,
-  logOut
+  authFailed
 } from "../../redux/actions/auth";
 
 class AuthFormComponent extends Component {
@@ -36,12 +35,18 @@ class AuthFormComponent extends Component {
       .post(`${API_HOST}api/${authMode}/`, { username, password })
       .then(({ data }) => {
         console.log(data);
-        data.success
-          ? this.props.authSucceed(username, data.token)
-          : this.props.authFailed(data.message);
+        if (data.success) {
+          this.props.authSucceed(username, data.token);
+          localStorage.setItem(`token`, data.token);
+          this.props.openPopup(true, username);
+        } else {
+          this.props.authFailed(data.message);
+          this.props.openPopup(false, data.message);
+        }
       })
       .catch(error => {
         this.props.authFailed(error);
+        this.props.openPopup(false, "Server troubles :(");
         console.error(error);
       });
   }
@@ -61,6 +66,7 @@ class AuthFormComponent extends Component {
             name="password"
             value={this.state.password}
             onChange={this.handleChange}
+            type="password"
           />
           <Form.Button content="Submit" />
         </Form.Group>
@@ -75,8 +81,7 @@ const mapDispatchToProps = dispatch => ({
   authRequested: (userName, password) =>
     dispatch(authRequested(userName, password)),
   authSucceed: (userName, token) => dispatch(authSucceed(userName, token)),
-  authFailed: error => dispatch(authFailed(error)),
-  logOut: () => dispatch(logOut())
+  authFailed: error => dispatch(authFailed(error))
 });
 
 const AuthForm = connect(
